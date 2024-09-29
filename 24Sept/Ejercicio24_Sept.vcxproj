@@ -128,7 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="C:\hlocal\Denisa\TPV1\24Sept\Date.cpp" />
+    <ClCompile Include="Date.cpp" />
     <ClCompile Include="Ejercicio24_Sept.cpp" />
   </ItemGroup>
   <ItemGroup>

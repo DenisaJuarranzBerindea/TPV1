@@ -13,64 +13,141 @@ struct Ejemplar {
 };
 
 struct Prestamo {
-	int codigo;
 	Date fecha;
 	int usuario;
+	Ejemplar* ej;
 };
 
 struct Catalogo {
-	int tamanyo;
+	int tam;
+	int tamReal;
+	Ejemplar* ejs;
+};
 
-
-
+struct ListaPrestamos {
+	int tam;
+	int tamReal;
+	Prestamo* pres;
 };
 
 
-bool LeerCatalogo(const std::string& catalogo) {
+bool LeerCatalogo(const std::string& archivo, Catalogo* cat) {
 
 	std::ifstream input;
-	input.open(catalogo);
+	input.open(archivo);
 	
 	if (!input.is_open()) {
-		std::cout << "No se ha podido leer el archivo" << std::endl;
 		return false;
 	}
 	else {
-		int n = 0;
-		std::cin >> n; //Leemos el número de ejemplares
+;
+		input >> cat->tam; //Leemos el número de ejemplares
+		cat->ejs = new Ejemplar[cat->tam];
+		cat->tamReal = 0;
 
-		for (int i = 0; i < n; i++)
+		Ejemplar* ej = new Ejemplar();
+
+		for (int i = 0; i < cat->tam; i++)
 		{
-			Ejemplar* ejemplar = new Ejemplar();
-			std::cin >> ejemplar->codigo >> ejemplar->tipo;
-			std::getline(std::cin, ejemplar->nombre);
+			input >> ej->codigo >> ej->tipo;
+			std::getline(input, ej->nombre);
+
+			//Rellenamos el array del catalogo
+			cat->ejs[i].codigo = ej->codigo;
+			cat->ejs[i].tipo = ej->tipo;
+			cat->ejs[i].nombre = ej->nombre;
+
+			cat->tamReal++;
 		}
+
+		//Vaciamos memoria
+		delete ej;
+		ej = nullptr;
 
 		return true;
 	}
 
 	input.close();
+
 }
 
-bool LeerPrestamos(const std::string& prestamo) {
+Ejemplar* BuscarEjemplar(int cod, Catalogo* cat, int ini, int fin) {
 
+	Ejemplar* ej = new Ejemplar();
+
+	int dif = fin - ini;
+
+	//No hay ejemplares
+	if (dif == 0) {
+		return nullptr;
+	}
+	else if (dif == 1) {
+		if (cat->ejs[ini].codigo == cod) {
+			ej->codigo = cat->ejs[ini].codigo;
+			ej->tipo = cat->ejs[ini].tipo;
+			ej->nombre = cat->ejs[ini].nombre;
+
+			return ej;
+			//Vaciamos memoria
+			delete ej;
+			ej = nullptr;
+		}
+		else {
+			return nullptr;
+		}
+	}
+
+	int mitad = (ini + fin) / 2;
+
+	if (cat->ejs[mitad].codigo < cod) {
+		BuscarEjemplar(cod, cat, mitad, fin);
+	}
+	else if (cat->ejs[mitad].codigo > cod) {
+		BuscarEjemplar(cod, cat, ini, mitad);
+	}
+	else if (cat->ejs[mitad].codigo == cod) {
+		ej->codigo = cat->ejs[mitad].codigo;
+		ej->tipo = cat->ejs[mitad].tipo;
+		ej->nombre = cat->ejs[mitad].nombre;
+
+		return ej;
+		//Vaciamos memoria
+		delete ej;
+		ej = nullptr;
+	}
+
+}
+
+bool LeerPrestamos(const std::string& archivo, ListaPrestamos* list, Catalogo* cat) {
 
 	std::ifstream input;
-	input.open(prestamo);
+	input.open(archivo);
 
 	if (!input.is_open()) {
-		std::cout << "No se ha podido leer el archivo" << std::endl;
 		return false;
 	}
 	else {
-		int n = 0;
-		std::cin >> n; //Leemos el número de ejemplares
+		
+		input >> list->tam; //Leemos el número de prestados
+		list->pres = new Prestamo[list->tam];
+		list->tamReal = 0;
 
-		for (int i = 0; i < n; i++)
+		Prestamo* pr = new Prestamo();
+
+		for (int i = 0; i < list->tam; i++)
 		{
-			Prestamo* prestamos = new Prestamo();
-			std::cin >> prestamos->codigo >> prestamos->fecha >> prestamos->usuario;
+			int cod;
+			input >> cod >> pr->fecha >> pr->usuario ;
+			
+			//Rellenamos el array del catalogo
+			list->pres[i].ej = BuscarEjemplar(cod, cat, 0, cat->tam);
+			list->pres[i].fecha = pr->fecha;
+			list->pres[i].usuario = pr->usuario;
 		}
+
+		//Vaciamos memoria
+		delete pr;
+		pr = nullptr;
 
 		return true;
 	}
@@ -78,21 +155,45 @@ bool LeerPrestamos(const std::string& prestamo) {
 	input.close();
 }
 
-void ordenarPrestamos() {
-	//Sort(puntero a primer elemento de la lista prestamo, puntero a final lista prestamo + 1)
-
-
-}
-
-
+//void OrdenarPrestamos() {
+//	//Sort(puntero a primer elemento de la lista prestamo, puntero a final lista prestamo + 1)
+//
+//
+//}
 
 int main()
 {
 	SetConsoleOutputCP(CP_UTF8);
 
+	Catalogo* cat = new Catalogo();
+	ListaPrestamos* list = new ListaPrestamos();
 
-	if (!LeerCatalogo("catalogo.txt")) {
-		std::cout << "patata";
+	if (LeerCatalogo("catalogo.txt", cat)) {
+		std::cout << "BIEN" << std::endl;
+	}
+	else {
+		std::cout << "No se ha podido leer el archivo." << std::endl;
+	}
+
+	//Ejemplar* ejBusca = new Ejemplar();
+	//ejBusca = BuscarEjemplar(1201, cat, 0, cat->tam);
+	//std::cout << ejBusca << std::endl;
+	//if (ejBusca == nullptr) {
+	//	std::cout << "Artículo no encontrado." << std::endl;
+	//}
+	//else {
+	//	std::cout << ejBusca->codigo << " " << ejBusca->tipo << ejBusca->nombre << std::endl;
+	//}
+
+	if (LeerPrestamos("prestamos.txt", list, cat)) {
+		std::cout << "BIEN" << std::endl;
+		for (int i = 0; i < list->tam; i++)
+		{
+			std::cout << list->pres[i].ej->codigo << " " << list->pres[i].fecha << " " << list->pres[i].usuario << std::endl;
+		}
+	}
+	else {
+		std::cout << "No se ha podido leer el archivo." << std::endl;
 	}
 
 	return 0;
