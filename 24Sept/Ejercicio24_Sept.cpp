@@ -1,4 +1,4 @@
-#include "Date.h"		//Para acceder a Fecha
+#include "Date.hpp"		//Para acceder a Fecha
 
 #include <iostream>
 #include <fstream>		//Para lectura y escritura en archivo
@@ -168,12 +168,12 @@ int main()
 	Catalogo* cat = new Catalogo();
 	ListaPrestamos* list = new ListaPrestamos();
 
-	if (LeerCatalogo("catalogo.txt", cat)) {
-		std::cout << "BIEN" << std::endl;
-	}
-	else {
-		std::cout << "No se ha podido leer el archivo." << std::endl;
-	}
+	//if (LeerCatalogo("catalogo.txt", cat)) {
+	//	std::cout << "BIEN" << std::endl;
+	//}
+	//else {
+	//	std::cout << "No se ha podido leer el archivo." << std::endl;
+	//}
 
 	//Ejemplar* ejBusca = new Ejemplar();
 	//ejBusca = BuscarEjemplar(1201, cat, 0, cat->tam);
