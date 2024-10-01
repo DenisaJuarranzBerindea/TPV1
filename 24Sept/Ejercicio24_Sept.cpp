@@ -160,10 +160,48 @@ bool operator<(const Prestamo& izdo, const Prestamo& dcho) {
 	return izdo.fecha < dcho.fecha;
 }
 
-void OrdenarPrestamos(ListaPrestamos* list) {
-	//Sort(puntero a primer elemento de la lista prestamo, puntero a final lista prestamo + 1)
-	std::sort(list->tam - (list->tam + 1), list->tam, operator<);
+Date SacaFechaFin(Prestamo& prestamo) {
 
+	if (prestamo.ej->tipo == 'L'){
+		return prestamo.fecha + 30;
+	}
+	else if (prestamo.ej->tipo == 'J') {
+		return prestamo.fecha + 14;
+	}
+	else if (prestamo.ej->tipo == 'A') {
+		return prestamo.fecha + 7;
+	}
+}
+
+void OrdenarPrestamos(ListaPrestamos* list) {
+
+
+	for (int i = 0; i < list->tam; i++) {
+
+		if (SacaFechaFin(list->pres[i + 1]) < SacaFechaFin(list->pres[i])) {
+			Prestamo* aux = new Prestamo();
+			aux->ej = list->pres[i].ej;
+			aux->fecha = list->pres[i].fecha;
+			aux->usuario = list->pres[i].usuario;
+
+			list->pres[i].ej = list->pres[i + 1].ej;
+			list->pres[i].fecha = list->pres[i + 1].fecha;
+			list->pres[i].usuario = list->pres[i + 1].usuario;
+
+			list->pres[i + 1].ej = aux->ej;
+			list->pres[i + 1].fecha = aux->fecha;
+			list->pres[i + 1].usuario = aux->usuario;
+		}
+		 
+
+	}
+
+
+
+
+	////Vaciamos memoria
+	//delete fechaFin;
+	//fechaFin = nullptr;
 }
 
 int main()
@@ -173,22 +211,22 @@ int main()
 	Catalogo* cat = new Catalogo();
 	ListaPrestamos* list = new ListaPrestamos();
 
-	//if (LeerCatalogo("catalogo.txt", cat)) {
-	//	std::cout << "BIEN" << std::endl;
-	//}
-	//else {
-	//	std::cout << "No se ha podido leer el archivo." << std::endl;
-	//}
+	if (LeerCatalogo("catalogo.txt", cat)) {
+		std::cout << "BIEN" << std::endl;
+	}
+	else {
+		std::cout << "No se ha podido leer el archivo." << std::endl;
+	}
 
-	//Ejemplar* ejBusca = new Ejemplar();
-	//ejBusca = BuscarEjemplar(1201, cat, 0, cat->tam);
-	//std::cout << ejBusca << std::endl;
-	//if (ejBusca == nullptr) {
-	//	std::cout << "Artículo no encontrado." << std::endl;
-	//}
-	//else {
-	//	std::cout << ejBusca->codigo << " " << ejBusca->tipo << ejBusca->nombre << std::endl;
-	//}
+	Ejemplar* ejBusca = new Ejemplar();
+	ejBusca = BuscarEjemplar(1201, cat, 0, cat->tam);
+	std::cout << ejBusca << std::endl;
+	if (ejBusca == nullptr) {
+		std::cout << "Artículo no encontrado." << std::endl;
+	}
+	else {
+		std::cout << ejBusca->codigo << " " << ejBusca->tipo << ejBusca->nombre << std::endl;
+	}
 
 	if (LeerPrestamos("prestamos.txt", list, cat)) {
 		std::cout << "BIEN" << std::endl;
