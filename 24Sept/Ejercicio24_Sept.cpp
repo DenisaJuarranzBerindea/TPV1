@@ -160,6 +160,7 @@ bool operator<(const Prestamo& izdo, const Prestamo& dcho) {
 	return izdo.fecha < dcho.fecha;
 }
 
+//Método auxiliar para calcular la fecha de fin del prestamo segun el tipo de ejemplar
 Date SacaFechaFin(Prestamo& prestamo) {
 
 	if (prestamo.ej->tipo == 'L'){
@@ -175,33 +176,42 @@ Date SacaFechaFin(Prestamo& prestamo) {
 
 void OrdenarPrestamos(ListaPrestamos* list) {
 
-
 	for (int i = 0; i < list->tam; i++) {
-
-		if (SacaFechaFin(list->pres[i + 1]) < SacaFechaFin(list->pres[i])) {
-			Prestamo* aux = new Prestamo();
-			aux->ej = list->pres[i].ej;
-			aux->fecha = list->pres[i].fecha;
-			aux->usuario = list->pres[i].usuario;
-
-			list->pres[i].ej = list->pres[i + 1].ej;
-			list->pres[i].fecha = list->pres[i + 1].fecha;
-			list->pres[i].usuario = list->pres[i + 1].usuario;
-
-			list->pres[i + 1].ej = aux->ej;
-			list->pres[i + 1].fecha = aux->fecha;
-			list->pres[i + 1].usuario = aux->usuario;
-		}
-		 
-
+		list->pres[i].fecha = SacaFechaFin(list->pres[i]);
 	}
 
+	//No funciona bien. Hay que ordenarlo manualmente
+	std::sort((list->tam - list->tam), list->tam, operator<);
+}
 
+int DiferenciaFechas(Prestamo& prestamo) {
 
+	return SacaFechaFin(prestamo).diff(prestamo.fecha);
+}
 
-	////Vaciamos memoria
-	//delete fechaFin;
-	//fechaFin = nullptr;
+int Penalizacion(Prestamo& prestamo) {
+
+	if (DiferenciaFechas(prestamo) < 0) {
+		return DiferenciaFechas(prestamo) * -2;
+	}
+	else {
+		return 0;
+	}
+	
+}
+
+void MostrarPrestamos(ListaPrestamos* list) {
+
+	for (int i = 0; i < list->tam; i++) {
+		std::cout << list->pres[i].fecha << " (en " << DiferenciaFechas(list->pres[i]) << " días) " <<
+		list->pres[i].ej->nombre;
+
+		if (Penalizacion(list->pres[i]) > 0) {
+			std::cout << "( " << Penalizacion(list->pres[i]) << " días de penalización)";
+		}
+		
+		std::cout << std::endl;
+	}
 }
 
 int main()
@@ -209,35 +219,42 @@ int main()
 	SetConsoleOutputCP(CP_UTF8);
 
 	Catalogo* cat = new Catalogo();
+	LeerCatalogo("catalogo.txt", cat);
 	ListaPrestamos* list = new ListaPrestamos();
+	LeerPrestamos("prestamos.txt", list, cat);
 
-	if (LeerCatalogo("catalogo.txt", cat)) {
-		std::cout << "BIEN" << std::endl;
-	}
-	else {
-		std::cout << "No se ha podido leer el archivo." << std::endl;
-	}
+	OrdenarPrestamos(list);
 
-	Ejemplar* ejBusca = new Ejemplar();
-	ejBusca = BuscarEjemplar(1201, cat, 0, cat->tam);
-	std::cout << ejBusca << std::endl;
-	if (ejBusca == nullptr) {
-		std::cout << "Artículo no encontrado." << std::endl;
-	}
-	else {
-		std::cout << ejBusca->codigo << " " << ejBusca->tipo << ejBusca->nombre << std::endl;
-	}
+	MostrarPrestamos(list);
 
-	if (LeerPrestamos("prestamos.txt", list, cat)) {
-		std::cout << "BIEN" << std::endl;
-		for (int i = 0; i < list->tam; i++)
-		{
-			std::cout << list->pres[i].ej->codigo << " " << list->pres[i].fecha << " " << list->pres[i].usuario << std::endl;
-		}
-	}
-	else {
-		std::cout << "No se ha podido leer el archivo." << std::endl;
-	}
+
+	//if (LeerCatalogo("catalogo.txt", cat)) {
+	//	std::cout << "BIEN" << std::endl;
+	//}
+	//else {
+	//	std::cout << "No se ha podido leer el archivo." << std::endl;
+	//}
+
+	//Ejemplar* ejBusca = new Ejemplar();
+	//ejBusca = BuscarEjemplar(1201, cat, 0, cat->tam);
+	//std::cout << ejBusca << std::endl;
+	//if (ejBusca == nullptr) {
+	//	std::cout << "Artículo no encontrado." << std::endl;
+	//}
+	//else {
+	//	std::cout << ejBusca->codigo << " " << ejBusca->tipo << ejBusca->nombre << std::endl;
+	//}
+
+	//if (LeerPrestamos("prestamos.txt", list, cat)) {
+	//	std::cout << "BIEN" << std::endl;
+	//	for (int i = 0; i < list->tam; i++)
+	//	{
+	//		std::cout << list->pres[i].ej->codigo << " " << list->pres[i].fecha << " " << list->pres[i].usuario << std::endl;
+	//	}
+	//}
+	//else {
+	//	std::cout << "No se ha podido leer el archivo." << std::endl;
+	//}
 
 	return 0;
 }
