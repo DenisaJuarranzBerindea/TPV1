@@ -157,21 +157,14 @@ bool LeerPrestamos(const std::string& archivo, ListaPrestamos* list, Catalogo* c
 
 bool operator<(const Prestamo& izdo, const Prestamo& dcho) {
 	
-	if (dcho.fecha < izdo.fecha) {
-		Prestamo* aux = new Prestamo();
-		/*aux = izdo;*/
-		return false;
-	}
-	else {
-		return true;
-	}
+	return izdo.fecha < dcho.fecha;
 }
 
-//void OrdenarPrestamos() {
-//	//Sort(puntero a primer elemento de la lista prestamo, puntero a final lista prestamo + 1)
-//
-//
-//}
+void OrdenarPrestamos(ListaPrestamos* list) {
+	//Sort(puntero a primer elemento de la lista prestamo, puntero a final lista prestamo + 1)
+	std::sort(list->tam - (list->tam + 1), list->tam, operator<);
+
+}
 
 int main()
 {
