@@ -155,6 +155,18 @@ bool LeerPrestamos(const std::string& archivo, ListaPrestamos* list, Catalogo* c
 	input.close();
 }
 
+bool operator<(const Prestamo& izdo, const Prestamo& dcho) {
+	
+	if (dcho.fecha < izdo.fecha) {
+		Prestamo* aux = new Prestamo();
+		/*aux = izdo;*/
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
 //void OrdenarPrestamos() {
 //	//Sort(puntero a primer elemento de la lista prestamo, puntero a final lista prestamo + 1)
 //
