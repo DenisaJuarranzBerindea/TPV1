@@ -4,7 +4,9 @@
 #include <fstream>		//Para lectura y escritura en archivo
 #include <string>		//Para usar string
 #include <windows.h>	//Para usar caracteres en Español
-#include <algorithm>
+#include <algorithm>	//Para el sort
+#include <vector>		//Para el sort también
+#include <ctime>		//Para usar la fecha actual	
 
 struct Ejemplar {
 	int codigo;
@@ -154,14 +156,8 @@ bool LeerPrestamos(const std::string& archivo, ListaPrestamos* list, Catalogo* c
 
 	input.close();
 }
-
-bool operator<(const Prestamo& izdo, const Prestamo& dcho) {
-	
-	return izdo.fecha < dcho.fecha;
-}
-
 //Método auxiliar para calcular la fecha de fin del prestamo segun el tipo de ejemplar
-Date SacaFechaFin(Prestamo& prestamo) {
+Date SacaFechaFin(const Prestamo& prestamo) {
 
 	if (prestamo.ej->tipo == 'L'){
 		return prestamo.fecha + 30;
@@ -174,19 +170,66 @@ Date SacaFechaFin(Prestamo& prestamo) {
 	}
 }
 
-void OrdenarPrestamos(ListaPrestamos* list) {
+bool operator<(const Prestamo& izdo, const Prestamo& dcho) {
+	
+	return SacaFechaFin(izdo) < SacaFechaFin(dcho);
+}
 
-	for (int i = 0; i < list->tam; i++) {
-		list->pres[i].fecha = SacaFechaFin(list->pres[i]);
+
+void OrdenarPrestamos(ListaPrestamos& list) {
+
+	std::vector<Prestamo> prestamos(list.tam);
+
+	for (int i = 0; i < prestamos.size(); i++) {
+		prestamos[i] = list.pres[i];
 	}
 
-	//No funciona bien. Hay que ordenarlo manualmente
-	std::sort((list->tam - list->tam), list->tam, operator<);
+	//Ordenamos por fecha de finalización
+	std:sort(prestamos.begin(), prestamos.end());
+
+	////Escribimos el array ya ordenado
+	//for (int i = 0; i < prestamos.size(); i++) {
+	//	std::cout << prestamos[i].fecha << " " << SacaFechaFin(prestamos[i]) << std::endl;
+	//} //Va bien
+
+	//Guardamos el orden del vector en la lista
+	for (int i = 0; i < list.tam; i++)
+	{
+		//Rellenamos el array del catalogo
+		list.pres[i].ej = prestamos[i].ej;
+		list.pres[i].fecha = prestamos[i].fecha;
+		list.pres[i].usuario = prestamos[i].usuario;
+	}
+
 }
+
+//Date Hoy() {
+//
+//
+//	//Conseguir la fecha y hora actual
+//	//std::time_t t = std::time(nullptr);
+//	//std::tm* now = std::localtime(&t);
+//
+//	time_t t;
+//	struct tm* timeinfo;
+//
+//	time(&t);
+//	timeinfo = localtime(&t);
+//
+//	Date* hoy = new Date(timeinfo->tm_mday, timeinfo->tm_mon, timeinfo->tm_year);
+//
+//	return *hoy;
+//}
+
 
 int DiferenciaFechas(Prestamo& prestamo) {
 
-	return SacaFechaFin(prestamo).diff(prestamo.fecha);
+	Date* hoy = new Date(01, 10, 2024); //(Por ejemplo)
+
+	int diferencia = SacaFechaFin(prestamo).diff(hoy);
+
+	//Hay que hacerlo respecto de hoy...
+
 }
 
 int Penalizacion(Prestamo& prestamo) {
@@ -223,9 +266,11 @@ int main()
 	ListaPrestamos* list = new ListaPrestamos();
 	LeerPrestamos("prestamos.txt", list, cat);
 
-	OrdenarPrestamos(list);
+	OrdenarPrestamos(*list);
 
 	MostrarPrestamos(list);
+
+	std::cout << "Bien";
 
 
 	//if (LeerCatalogo("catalogo.txt", cat)) {
