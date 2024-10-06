@@ -156,6 +156,7 @@ bool LeerPrestamos(const std::string& archivo, ListaPrestamos* list, Catalogo* c
 
 	input.close();
 }
+
 //Método auxiliar para calcular la fecha de fin del prestamo segun el tipo de ejemplar
 Date SacaFechaFin(const Prestamo& prestamo) {
 
@@ -175,10 +176,10 @@ bool operator<(const Prestamo& izdo, const Prestamo& dcho) {
 	return SacaFechaFin(izdo) < SacaFechaFin(dcho);
 }
 
-
 void OrdenarPrestamos(ListaPrestamos& list) {
 
 	std::vector<Prestamo> prestamos(list.tam);
+	
 
 	for (int i = 0; i < prestamos.size(); i++) {
 		prestamos[i] = list.pres[i];
@@ -187,49 +188,23 @@ void OrdenarPrestamos(ListaPrestamos& list) {
 	//Ordenamos por fecha de finalización
 	std:sort(prestamos.begin(), prestamos.end());
 
-	////Escribimos el array ya ordenado
-	//for (int i = 0; i < prestamos.size(); i++) {
-	//	std::cout << prestamos[i].fecha << " " << SacaFechaFin(prestamos[i]) << std::endl;
-	//} //Va bien
-
 	//Guardamos el orden del vector en la lista
 	for (int i = 0; i < list.tam; i++)
 	{
-		//Rellenamos el array del catalogo
+		//Rellenamos el array del catálogo
 		list.pres[i].ej = prestamos[i].ej;
 		list.pres[i].fecha = prestamos[i].fecha;
 		list.pres[i].usuario = prestamos[i].usuario;
 	}
-
 }
-
-//Date Hoy() {
-//
-//
-//	//Conseguir la fecha y hora actual
-//	//std::time_t t = std::time(nullptr);
-//	//std::tm* now = std::localtime(&t);
-//
-//	time_t t;
-//	struct tm* timeinfo;
-//
-//	time(&t);
-//	timeinfo = localtime(&t);
-//
-//	Date* hoy = new Date(timeinfo->tm_mday, timeinfo->tm_mon, timeinfo->tm_year);
-//
-//	return *hoy;
-//}
-
 
 int DiferenciaFechas(Prestamo& prestamo) {
 
-	Date* hoy = new Date(01, 10, 2024); //(Por ejemplo)
+	Date hoy = Date();
 
 	int diferencia = SacaFechaFin(prestamo).diff(hoy);
 
-	//Hay que hacerlo respecto de hoy...
-
+	return diferencia;
 }
 
 int Penalizacion(Prestamo& prestamo) {
@@ -246,11 +221,23 @@ int Penalizacion(Prestamo& prestamo) {
 void MostrarPrestamos(ListaPrestamos* list) {
 
 	for (int i = 0; i < list->tam; i++) {
-		std::cout << list->pres[i].fecha << " (en " << DiferenciaFechas(list->pres[i]) << " días) " <<
-		list->pres[i].ej->nombre;
+		std::cout << list->pres[i].fecha << " (en ";
+
+		if (DiferenciaFechas(list->pres[i]) >= 0 && DiferenciaFechas(list->pres[i]) <= 9){
+			std::cout << "   ";
+		}
+		else if ((DiferenciaFechas(list->pres[i]) > 9 && DiferenciaFechas(list->pres[i]) <= 99) ||
+			(DiferenciaFechas(list->pres[i]) > -10 && DiferenciaFechas(list->pres[i]) <= -1)) {
+			std::cout << "  ";
+		}
+		else if (DiferenciaFechas(list->pres[i]) < -9 && DiferenciaFechas(list->pres[i]) >= -99) {
+			std::cout << " ";
+		}
+
+		std::cout << DiferenciaFechas(list->pres[i]) << " días) " << list->pres[i].ej->nombre;
 
 		if (Penalizacion(list->pres[i]) > 0) {
-			std::cout << "( " << Penalizacion(list->pres[i]) << " días de penalización)";
+			std::cout << " (" << Penalizacion(list->pres[i]) << " días de penalización)";
 		}
 		
 		std::cout << std::endl;
@@ -269,37 +256,6 @@ int main()
 	OrdenarPrestamos(*list);
 
 	MostrarPrestamos(list);
-
-	std::cout << "Bien";
-
-
-	//if (LeerCatalogo("catalogo.txt", cat)) {
-	//	std::cout << "BIEN" << std::endl;
-	//}
-	//else {
-	//	std::cout << "No se ha podido leer el archivo." << std::endl;
-	//}
-
-	//Ejemplar* ejBusca = new Ejemplar();
-	//ejBusca = BuscarEjemplar(1201, cat, 0, cat->tam);
-	//std::cout << ejBusca << std::endl;
-	//if (ejBusca == nullptr) {
-	//	std::cout << "Artículo no encontrado." << std::endl;
-	//}
-	//else {
-	//	std::cout << ejBusca->codigo << " " << ejBusca->tipo << ejBusca->nombre << std::endl;
-	//}
-
-	//if (LeerPrestamos("prestamos.txt", list, cat)) {
-	//	std::cout << "BIEN" << std::endl;
-	//	for (int i = 0; i < list->tam; i++)
-	//	{
-	//		std::cout << list->pres[i].ej->codigo << " " << list->pres[i].fecha << " " << list->pres[i].usuario << std::endl;
-	//	}
-	//}
-	//else {
-	//	std::cout << "No se ha podido leer el archivo." << std::endl;
-	//}
 
 	return 0;
 }
