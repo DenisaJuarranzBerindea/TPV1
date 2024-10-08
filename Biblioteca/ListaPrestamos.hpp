@@ -4,7 +4,7 @@
 #include "Catalogo.hpp"
 #include "checkML.h"
 
-class ListaPrestamo
+class ListaPrestamos
 {
 	// atributos privados
 private:
@@ -16,14 +16,14 @@ private:
 	// metodos publicos
 public:
 	// constructora
-	ListaPrestamo();
-	ListaPrestamo(std::istream& const e, const Catalogo& c);
+	ListaPrestamos();
+	ListaPrestamos(std::istream& const e, const Catalogo& c);
 
 	// destructora
-	~ListaPrestamo();
+	~ListaPrestamos();
 
 	// operador salida
-	friend std::ostream& operator<<(std::ostream& out, const ListaPrestamo&);
+	friend std::ostream& operator<<(std::ostream& out, const ListaPrestamos&);
 
 	// lectura
 	bool leerPrestamos(Catalogo& catalogo); // esto ya no se lee aqui
@@ -31,6 +31,7 @@ public:
 	// metodos
 	void ordenarPrestamos();
 	void insertaPrestamo(const Prestamo&);
+	void devuelvePrestamo(const Prestamo&);
 
 	// render
 	void mostrarPrestamos();

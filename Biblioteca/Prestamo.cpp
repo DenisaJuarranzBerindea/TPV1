@@ -1,9 +1,21 @@
-#include "Date.hpp"		//Para acceder a Fecha
+#include "Prestamo.hpp"
 
-#include <iostream>
-#include <fstream>		//Para lectura y escritura en archivo
-#include <string>		//Para usar string
-#include <windows.h>	//Para usar caracteres en Español
-#include <algorithm>	//Para el sort
-#include <vector>		//Para el sort también
-#include <ctime>		//Para usar la fecha actual	
+Prestamo::Prestamo()
+{
+
+}
+
+Prestamo::Prestamo(Ejemplar* e, Date f, int u)
+{
+
+}
+
+bool Prestamo::operator<(const Prestamo& prestamo) const
+{
+	return false;
+}
+
+void Prestamo::leePrestamo(const Catalogo&)
+{
+
+}

@@ -11,14 +11,14 @@ int main()
     SetConsoleOutputCP(CP_UTF8);
 
     Catalogo catalogo;
-    ListaPrestamo listaPrestamo;
+    ListaPrestamos listaPrestamos;
 
     // carga catalogo y lista prestamos
     catalogo.leerCatalogo();
-    listaPrestamo.leerPrestamos(catalogo);
+    listaPrestamos.leerPrestamos(catalogo);
 
     // ordena prestamos
-    listaPrestamo.ordenarPrestamos();
+    listaPrestamos.ordenarPrestamos();
 
     // mostrar un menú con opciones para:
     std::cout << "Seleccione::" << std::endl;
@@ -39,7 +39,7 @@ int main()
     else if (input == 'b')
     {
         system("cls");
-        listaPrestamo.mostrarPrestamos();
+        listaPrestamos.mostrarPrestamos();
     }
     else if (input == 'c')
     {
@@ -51,8 +51,7 @@ int main()
         std::cout << "De que tipo es tu ejemplar: L) Libros / A) Audiovisual / J) Juegos" << std::endl;
         std::cin >> tipo;
         std::cout << "Inserte el nombre del ejemplar" << std::endl;
-        //std::getline(std::cin, nombre);
-        std::cin >> nombre;
+        std::getline(std::cin, nombre);
         std::cout << "nombre: " << nombre << std::endl;
 
         catalogo.insertaEjemplar(tipo, nombre);
@@ -74,9 +73,9 @@ int main()
 
         Prestamo p = Prestamo(e, hoy, u);
 
-        listaPrestamo.insertaPrestamo(p);
+        listaPrestamos.insertaPrestamo(p);
 
-        listaPrestamo.ordenarPrestamos();
+        listaPrestamos.ordenarPrestamos();
     }
     else if (input == 'e')
     {
@@ -95,9 +94,9 @@ int main()
 
         Prestamo p = Prestamo(e, hoy, u);
 
-        listaPrestamo.insertaPrestamo(p);
+        listaPrestamos.insertaPrestamo(p);
 
-        listaPrestamo.ordenarPrestamos();
+        listaPrestamos.ordenarPrestamos();
     }
     else if (input == 'f')
     {

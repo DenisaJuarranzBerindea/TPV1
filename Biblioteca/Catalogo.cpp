@@ -1,4 +1,4 @@
-#include "Catalogo.h"
+#include "Catalogo.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -15,7 +15,7 @@ Catalogo::Catalogo(std::istream&)
 
 Catalogo::~Catalogo()
 {
-    delete[] ArrayCatalogo;
+    delete[] ejs;
 }
 
 bool Catalogo::leerCatalogo()
@@ -29,16 +29,16 @@ bool Catalogo::leerCatalogo()
     std::string n; // nombre del ejemplar
 
     // saca el tamaño de la lista de coches
-    catalogoRead >> tamArrayCatalogo;
+    catalogoRead >> tamReal;
 
     // crea el array dinamico
-    ArrayCatalogo = new Ejemplar[tamArrayCatalogo];
+    ejs = new Ejemplar[tamReal];
 
     // bucle para leer los datos
-    for (int i = 0; i < tamArrayCatalogo; i++)
+    for (int i = 0; i < tamReal; i++)
     {
         catalogoRead >> c; // lee el codigo
-        ArrayCatalogo[i].setCodigo(c); // lo mete
+        ejs[i].setCodigo(c); // lo mete
 
         catalogoRead >> tc; // lee el tipo
 
@@ -55,10 +55,10 @@ bool Catalogo::leerCatalogo()
             ti = 2;
         }
 
-        ArrayCatalogo[i].setTipo(ti); // lo mete 
+        ejs[i].setTipo(ti); // lo mete 
 
         std::getline(catalogoRead, n); // lee el nombre
-        ArrayCatalogo[i].setNombre(n); // lo mete
+        ejs[i].setNombre(n); // lo mete
     }
 
     return catalogoRead.is_open(); // true -> archivo catalogo abierto / false -> error
