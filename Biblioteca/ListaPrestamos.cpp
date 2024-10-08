@@ -60,12 +60,12 @@ void ListaPrestamos::ordenarPrestamos()
 
 void ListaPrestamos::insertaPrestamo(const Prestamo&)
 {
-
+    tamReal++;
 }
 
 void ListaPrestamos::devuelvePrestamo(const Prestamo&)
 {
-
+    tamReal--;
 }
 
 void ListaPrestamos::mostrarPrestamos()

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Prestamo.hpp"
 #include "Catalogo.hpp"
 #include "checkML.h"

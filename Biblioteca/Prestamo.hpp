@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Date.hpp"
 #include "Ejemplar.hpp"
 #include "checkML.h"

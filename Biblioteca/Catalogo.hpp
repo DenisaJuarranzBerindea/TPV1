@@ -1,5 +1,3 @@
-#pragma once	//Solo se ejecuta 1 vez
-
 #include "Ejemplar.hpp"
 #include "checkML.h"
 
