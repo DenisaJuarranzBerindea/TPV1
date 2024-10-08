@@ -16,68 +16,61 @@ Catalogo::Catalogo(std::istream&)
 Catalogo::~Catalogo()
 {
     delete[] ejs;
+    ejs = nullptr;
 }
 
 bool Catalogo::leerCatalogo()
 {
-    // abre el archivo coches.txt
-    std::fstream catalogoRead("catalogo.txt");
+    // Abre el archivo para la lectura
+    std::fstream catalogo("catalogo.txt");
 
-    int c; // codigo del ejemplar
-    char tc; // tipo del ejemplar, char
-    int ti;
-    std::string n; // nombre del ejemplar
+    int cod; // Código
+    char tc; // Tipo, char
+    int ti; //Tipo, int, para cuestiones internas
+    std::string n; // Nombre
 
-    // saca el tamaño de la lista de coches
-    catalogoRead >> tamReal;
+    // Tamaño
+    catalogo >> tamReal;
 
-    // crea el array dinamico
+    // Array dinámico
     ejs = new Ejemplar[tamReal];
 
-    // bucle para leer los datos
+    // Lee los datos
     for (int i = 0; i < tamReal; i++)
     {
-        catalogoRead >> c; // lee el codigo
-        ejs[i].setCodigo(c); // lo mete
+        catalogo >> cod;  
+        ejs[i].setCodigo(cod); 
 
-        catalogoRead >> tc; // lee el tipo
+        catalogo >> tc; 
 
-        if (tc == 'L') // libros
-        {
-            ti = 0;
-        }
-        else if (tc == 'A') // audiovisual
-        {
-            ti = 1;
-        }
-        else // juegos
-        {
-            ti = 2;
-        }
+        if (tc == 'L') ti = 0;// Libro
+        else if (tc == 'A') ti = 1; // Audiovisual
+        else ti = 2; // Juego
 
-        ejs[i].setTipo(ti); // lo mete 
+        ejs[i].setTipo(ti); 
 
-        std::getline(catalogoRead, n); // lee el nombre
-        ejs[i].setNombre(n); // lo mete
+        std::getline(catalogo, n);
+        ejs[i].setNombre(n);
     }
 
-    return catalogoRead.is_open(); // true -> archivo catalogo abierto / false -> error
+    return catalogo.is_open(); 
 }
 
-Ejemplar* Catalogo::buscarEjemplar(int cod, int ini, int fin) const
+//Búsqueda binaria
+Ejemplar* Catalogo::buscarEjemplar(const int cod, int ini, int fin) 
 {
     int elems = fin - ini;
 
-    if (elems == 0) return nullptr; // vacio
+    if (elems == 0) return nullptr;
     if (elems == 1) return getEjemplar(ini);
 
     int mit = (ini + fin) / 2;
 
-    if (cod >= getEjemplar(mit)->getCodigo()) // busca derecha
+    if (cod >= getEjemplar(mit)->getCodigo()) // Dcha
     {
         return buscarEjemplar(cod, mit, fin);
     }
-    if (cod < getEjemplar(mit)->getCodigo()) // busca izq
+    if (cod < getEjemplar(mit)->getCodigo()) // Izqda
     {
         return buscarEjemplar(cod, ini, mit);
     }

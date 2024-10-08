@@ -6,33 +6,31 @@
 
 class ListaPrestamos
 {
-	// atributos privados
 private:
-	// array dinamico ArrayPrestamo de punteros a estructuras de tipo Prestamo
+	// Array dinámico con punteros en tipo Prestamo
 	Prestamo* pres;
 	int tamReal;
 	int tam;
 
-	// metodos publicos
 public:
-	// constructora
+	// Constructoras
 	ListaPrestamos();
 	ListaPrestamos(std::istream& const e, const Catalogo& c);
 
-	// destructora
+	// Destructora
 	~ListaPrestamos();
 
-	// operador salida
+	// Operador escritura
 	friend std::ostream& operator<<(std::ostream& out, const ListaPrestamos&);
 
-	// lectura
+	// Lectura
 	bool leerPrestamos(Catalogo& catalogo); // esto ya no se lee aqui
 
-	// metodos
+	// Métodos
 	void ordenarPrestamos();
 	void insertaPrestamo(const Prestamo&);
 	void devuelvePrestamo(const Prestamo&);
 
-	// render
+	// Render
 	void mostrarPrestamos();
 };

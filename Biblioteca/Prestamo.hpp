@@ -7,7 +7,7 @@
 
 class Prestamo
 {
-	// atributos privados
+	
 private:
 	Ejemplar* ejemplar;
 
@@ -16,63 +16,45 @@ private:
 
 	int user;
 
-	// metodos publicos
 public:
-	// constructoras
+	// Constructoras
 	Prestamo();
 	Prestamo(Ejemplar* e, Date f, int u);
 
-	// ----- declaracion de operadores
-	// lee
+	// Operadores
+	// Lectura
 	friend std::istream& operator>>(std::istream& in, Prestamo& p);
-	// escribe
+	// Escritura
 	friend std::ostream& operator<<(std::ostream& out, const Prestamo& p);
-	// comparación
+	// Comparación
 	bool operator<(const Prestamo& prestamo) const;
 
-	// ----- para acceso externo a variables privadas
-	// --- usuario
-	// Setter
+	// Getters y Setters
 	void setUser(int usuario) { user = usuario; }
-	// Getter
 	char getUser() { return user; }
 
-	// --- fecha
-	// Setter
 	void setDate(Date f) { fecha = f; }
 	void setDateDevol(Date f) { fechaDevolucion = f; }
-	// Getters
+
 	Date getDate() { return fecha; }
 	Date getDateDevol() const { return fecha + duracionPrestamo((*this->ejemplar).getTipo()); }
 
-	// --- ejemplar
-	// Setter
 	void setEjemplar(Ejemplar* e) { ejemplar = e; }
-	// Getter
 	Ejemplar* getEjemplar() { return ejemplar; }
 
-	// ----- metodos
-	// calcula duracion de prestamo
+	// Métodos
 	int duracionPrestamo(int tipo) const
 	{
-		// libros
-		if (tipo == 0)
-		{
-			return 30;
-		}
+		// Libros
+		if (tipo == 0) return 30;
 
-		// audiovisual
-		if (tipo == 1)
-		{
-			return 7;
-		}
+		// Audiovisual
+		if (tipo == 1) return 7;
 
-		// juegos
-		if (tipo == 2)
-		{
-			return 14;
-		}
+		// Juegos
+		if (tipo == 2) return 14;
 	}
 
+	//Lectura
 	void leePrestamo(const Catalogo&);
 };

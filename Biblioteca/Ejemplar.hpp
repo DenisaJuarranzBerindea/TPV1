@@ -4,7 +4,6 @@
 
 class Ejemplar
 {
-	// atributos privados
 private:
 	int codigo;
 
@@ -18,38 +17,28 @@ private:
 
 	bool disponible;
 
-	// metodos publicos
 public:
-	// constructoras
+	// Constructoras
 	Ejemplar();
 	Ejemplar(int c, char t, std::string n);
 
-	// ----- declaracion de operadores
-	// lee
+	// Operadores
+	// Lectura
 	friend std::istream& operator>>(std::istream& in, Ejemplar& e);
-	// escribe
+	// Escritura
 	friend std::ostream& operator<<(std::ostream& out, const Ejemplar& e);
 
-	// ----- acceso externo a variables privadas
-	// --- codigo
-	// Setter
+	// Getters y Setters
 	void setCodigo(int c) { codigo = c; }
-	// Getter
 	int getCodigo() { return codigo; }
 
-	// --- tipo
-	// Setter
 	void setTipo(int tipo) { t = Tipo(tipo); }
-	// Getter
 	int getTipo() { return Tipo(t); }
 
-	// --- nombre
-	// Setter
 	void setNombre(std::string n) { nombre = n; }
-	// Getter
 	std::string getNombre() const { return nombre; }
 
-	// ----- metodos
+	// Métodos
 	void presta();
 	void devuelve();
 };

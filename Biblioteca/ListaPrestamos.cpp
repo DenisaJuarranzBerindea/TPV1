@@ -23,44 +23,43 @@ ListaPrestamos::~ListaPrestamos()
 
 bool ListaPrestamos::leerPrestamos(Catalogo& catalogo)
 {
-    // abre el archivo coches.txt
-    std::fstream prestamoRead("prestamos.txt");
+    // Abre el archivo
+    std::fstream prestamo("prestamos.txt");
 
-    int c; // codigo del ejemplar
-    int u; // usuario del prestamo
-    Date fecha; // fecha del prestamo
+    int c; // Código
+    int u; // Usuario
+    Date fecha; // Fecha
 
-    // saca el tamaño de la lista de coches
-    prestamoRead >> tamReal;
+    // Tamaño
+    prestamo >> tamReal;
 
-    // crea el array dinamico
+    // Array dinámico
     pres = new Prestamo[tamReal];
 
-    // bucle para leer los datos
+    // Lee los datos
     for (int i = 0; i < tamReal; i++)
     {
-        prestamoRead >> c; // lee el codigo
-        pres[i].setEjemplar(catalogo.buscarEjemplar(c, 0, catalogo.getTam())); // lo mete
+        prestamo >> c; 
+        pres[i].setEjemplar(catalogo.buscarEjemplar(c, 0, catalogo.getTam()));
 
-        prestamoRead >> fecha; // lee la fecha
-        pres[i].setDate(fecha); // la mete
+        prestamo >> fecha;
+        pres[i].setDate(fecha);
 
-        prestamoRead >> u; // lee el user
-        pres[i].setUser(u); // lo mete 
+        prestamo >> u;
+        pres[i].setUser(u);
     }
 
-    return prestamoRead.is_open(); // true -> archivo prestamos abierto / false -> error  
+    return prestamo.is_open(); 
 }
 
 void ListaPrestamos::ordenarPrestamos()
 {
-    Prestamo* a = pres + 8;
+    Prestamo* a = pres + tamReal;
     std::sort(pres, a);
 }
 
 void ListaPrestamos::insertaPrestamo(const Prestamo&)
 {
-    // insertar en el hueco que le corresponde por orden de código
 
 }
 
@@ -76,20 +75,29 @@ void ListaPrestamos::mostrarPrestamos()
     Date devol;
     Date* hoy = new Date();
 
-    for (int i = 0; i < tamReal; i++)
-    {
+    for (int i = 0; i < tamReal; i++) {
         prest = pres[i].getDate();
         devol = pres[i].getDateDevol();
-        std::cout << (devol);
-        std::cout << " ";
+        std::cout << (devol) ;
+
         quedan = (devol.diff(*hoy));
-        std::cout << "(en  " << quedan << " dias)";
-        std::cout << " ";
+        std::cout << "(en ";
+        if (quedan >= 0 && quedan <= 9) {
+            std::cout << "   ";
+        }
+        else if ((quedan > 9 && quedan <= 99) || (quedan > -10 && quedan <= -1)) {
+            std::cout << "  ";
+        }
+        else if (quedan < -9 && quedan >= -99) {
+            std::cout << " ";
+        }
+        std::cout << quedan << " días) ";
         std::cout << pres[i].getEjemplar()->getNombre();
+
         if (quedan < 0)
         {
             std::cout << " ";
-            std::cout << "(" << abs(quedan) * 2 << " dias de penalizacion)";
+            std::cout << "(" << abs(quedan) * 2 << " días de penalización)";
         }
         std::cout << std::endl;
     }

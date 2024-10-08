@@ -13,14 +13,14 @@ int main()
     Catalogo catalogo;
     ListaPrestamos listaPrestamos;
 
-    // carga catalogo y lista prestamos
+    // Lee Catálogo y ListaPréstamos
     catalogo.leerCatalogo();
     listaPrestamos.leerPrestamos(catalogo);
 
-    // ordena prestamos
+    // Ordena los préstamos
     listaPrestamos.ordenarPrestamos();
 
-    // mostrar un menú con opciones para:
+    // Menú
     std::cout << "Seleccione::" << std::endl;
     std::cout << "a) Mostrar catálogo" << std::endl;
     std::cout << "b) Mostrar préstamos" << std::endl;
@@ -29,45 +29,40 @@ int main()
     std::cout << "e) Devolver ejemplar" << std::endl;
     std::cout << "f) Salir" << std::endl;
 
+    // Leemos opción y accionamos en consecuencia
     char input = ' ';
     std::cin >> input;
     if (input == 'a')
     {
-        system("cls");
         catalogo.mostrarCatalogo();
     }
     else if (input == 'b')
     {
-        system("cls");
         listaPrestamos.mostrarPrestamos();
     }
     else if (input == 'c')
     {
-        system("cls");
-
         char tipo = ' ';
         std::string nombre;
 
-        std::cout << "De que tipo es tu ejemplar: L) Libros / A) Audiovisual / J) Juegos" << std::endl;
+        std::cout << "Tipo de ejemplar L) Libros / A) Audiovisual / J) Juegos: " << std::endl;
         std::cin >> tipo;
-        std::cout << "Inserte el nombre del ejemplar" << std::endl;
+        std::cout << "Inserte el nombre del ejemplar: " << std::endl;
         std::getline(std::cin, nombre);
-        std::cout << "nombre: " << nombre << std::endl;
+        std::cout << "Nombre: " << nombre << std::endl;
 
         catalogo.insertaEjemplar(tipo, nombre);
     }
     else if (input == 'd')
     {
-        system("cls");
-
-        std::cout << "Inserta el codigo del ejemplar a prestar" << std::endl;
+        std::cout << "Inserta el código del ejemplar: " << std::endl;
         int cod = 0;
         std::cin >> cod;
         Ejemplar* e = catalogo.buscarEjemplar(cod, 0, catalogo.getTam());
 
         Date hoy = Date();
 
-        std::cout << "Inserta tu numero de usuario" << std::endl;
+        std::cout << "Inserta tu usuario: " << std::endl;
         int u = 0;
         std::cin >> u;
 
@@ -79,16 +74,14 @@ int main()
     }
     else if (input == 'e')
     {
-        system("cls");
-
-        std::cout << "Inserta el codigo del ejemplar a prestar" << std::endl;
+        std::cout << "Inserta el código del ejemplar: " << std::endl;
         int cod = 0;
         std::cin >> cod;
         Ejemplar* e = catalogo.buscarEjemplar(cod, 0, catalogo.getTam());
 
         Date hoy = Date();
 
-        std::cout << "Inserta tu numero de usuario" << std::endl;
+        std::cout << "Inserta tu usuario: " << std::endl;
         int u = 0;
         std::cin >> u;
 
